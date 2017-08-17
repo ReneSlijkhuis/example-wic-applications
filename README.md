@@ -3,6 +3,10 @@ These example C++ and C# projects show how to use the Windows Imaging Component 
 
 ![example_3](http://www.xs4all.nl/~reneslkh/wic/example_3.png)
 
+# Requirements
+* Microsoft Windows 7 or later.
+* Microsoft Visual Studio 2015 or later.
+
 # Example 1
 **Language:** C+  
 **Description:** Shows how to read an image using the Windows Imaging Component (WIC).
