@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9265725D-96D8-46EE-887C-688F32236258}") = "WicClient", "WicClient.vcxproj", "{E5E34B9D-2E6D-457A-8344-111C12B53E33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Debug|x64.ActiveCfg = Debug|x64
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Debug|x64.Build.0 = Debug|x64
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Debug|x86.ActiveCfg = Debug|Win32
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Debug|x86.Build.0 = Debug|Win32
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Release|x64.ActiveCfg = Release|x64
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Release|x64.Build.0 = Release|x64
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Release|x86.ActiveCfg = Release|Win32
+		{E5E34B9D-2E6D-457A-8344-111C12B53E33}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

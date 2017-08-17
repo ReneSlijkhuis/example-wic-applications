@@ -8,7 +8,7 @@ These example C++ and C# projects show how to use the Windows Imaging Component 
 * Microsoft Visual Studio 2015 or later.
 
 # Example 1
-**Language:** C+  
+**Language:** C++  
 **Description:** Shows how to read an image using the Windows Imaging Component (WIC).
 
 # Example 2
@@ -22,6 +22,10 @@ These example C++ and C# projects show how to use the Windows Imaging Component 
 # Example 4
 **Language:** C#  
 **Description:** Shows how to read an image using the Windows Imaging Component (WIC).
+
+# Example 5
+**Language:** C++  
+**Description:** Shows how to read image metadata using the Windows Imaging Component (WIC).
 
 # License
 Released under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).
