@@ -27,5 +27,9 @@ These example C++ and C# projects show how to use the Windows Imaging Component 
 **Language:** C++  
 **Description:** Shows how to read image metadata using the Windows Imaging Component (WIC).
 
+## Example 6
+**Language:** C#  
+**Description:** Similar as example 4 but it uses the NuGet package [stakx.WIC](https://www.nuget.org/packages/stakx.WIC/) instead of the Microsoft WicCop interop library.
+
 ## License
 Released under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).

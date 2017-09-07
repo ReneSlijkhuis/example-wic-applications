@@ -17,3 +17,7 @@ cd ..
 cd example_5
 call clean.bat
 cd ..
+
+cd example_6
+call clean.bat
+cd ..
