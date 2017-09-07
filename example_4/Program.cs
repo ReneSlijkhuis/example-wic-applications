@@ -66,7 +66,7 @@ namespace WicClient
 
                 // The disadvantage of this solution is that you have to deal with all possible pixel formats.
 
-                // You can make your life easy by converting the frame to a pixel format of 
+                // You can make your life easy by converting the frame to a pixel format of
                 // your choice. The code below shows how to convert the pixel format to 24-bit RGB.
 
                 formatConverter = factory.CreateFormatConverter();
@@ -79,7 +79,7 @@ namespace WicClient
                                            WICBitmapPaletteType.WICBitmapPaletteTypeCustom);
 
                 uint bytesPerPixel = 3; // Because we have converted the frame to 24-bit RGB
-                uint stride = ((Utilities.GetBitPerPixel(pixelFormat) * width + 7) / 8) * bytesPerPixel;
+                uint stride = width * bytesPerPixel;
                 byte[] bytes = new byte[stride * height];
 
                 formatConverter.CopyPixels(null, stride, stride * height, bytes);
