@@ -26,8 +26,9 @@
 
 #include "stdafx.h"
 
-#include <atlbase.h>
 #include <vector>
+#include <atlbase.h>
+#include <initguid.h>
 #include <Wincodec.h>
 
 using namespace std;
@@ -39,16 +40,28 @@ using namespace std;
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void WicReadFrame( const wstring& filename )
+// GUID of the Lisa image format (this should be known by applications that want to write this format).
+// {91DFBD70-3D2C-440F-B297-1E2097D4A833}
+DEFINE_GUID(GUID_LisaContainerFormat, 0x91dfbd70, 0x3d2c, 0x440f, 0xb2, 0x97, 0x1e, 0x20, 0x97, 0xd4, 0xa8, 0x33);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SaveAsLisa( const wstring& filename )
 {
     CoInitialize( nullptr );
     {
         CComPtr<IWICImagingFactory> pFactory;
         CComPtr<IWICBitmapDecoder> pDecoder;
-        CComPtr<IWICBitmapFrameDecode> pFrame;
+        CComPtr<IWICBitmapEncoder> pEncoder;
+        CComPtr<IWICBitmapFrameDecode> pFrameDecode;
+        CComPtr<IWICBitmapFrameEncode> pFrameEncode;
         CComPtr<IWICFormatConverter> pFormatConverter;
+        CComPtr<IWICStream> pFileStream;
+        CComPtr<IPropertyBag2> pPropertyBag;
 
         CoCreateInstance( CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (LPVOID*)&pFactory );
+
+        // Read the specified file by using an installed WIC codec.
 
         pFactory->CreateDecoderFromFilename( filename.c_str( ), NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pDecoder );
         // Check the return value to see if:
@@ -58,15 +71,16 @@ void WicReadFrame( const wstring& filename )
         UINT frameCount = 0;
         pDecoder->GetFrameCount( &frameCount );
 
-        pDecoder->GetFrame( 0, &pFrame );
-        // The zero-based index should be smaller than the frame count.
+        pDecoder->GetFrame( 0, &pFrameDecode );
 
         UINT width = 0;
         UINT height = 0;
-        pFrame->GetSize( &width, &height );
+        pFrameDecode->GetSize( &width, &height );
 
-        WICPixelFormatGUID pixelFormatGUID;
-        pFrame->GetPixelFormat( &pixelFormatGUID );
+        WICPixelFormatGUID pixelFormatSource;
+        pFrameDecode->GetPixelFormat( &pixelFormatSource );
+
+        WICPixelFormatGUID pixelFormatDestination = GUID_WICPixelFormat24bppRGB;
 
         // The frame can use many different pixel formats.
         // You can copy the raw pixel values by calling "pFrame->CopyPixels( )".
@@ -80,8 +94,8 @@ void WicReadFrame( const wstring& filename )
 
         pFactory->CreateFormatConverter( &pFormatConverter );
 
-        pFormatConverter->Initialize( pFrame,                       // Input bitmap to convert
-                                      GUID_WICPixelFormat24bppRGB,  // Destination pixel format
+        pFormatConverter->Initialize( pFrameDecode,                 // Input bitmap to convert
+                                      pixelFormatDestination,       // Destination pixel format
                                       WICBitmapDitherTypeNone,      // Specified dither pattern
                                       nullptr,                      // Specify a particular palette
                                       0.f,                          // Alpha threshold
@@ -92,8 +106,33 @@ void WicReadFrame( const wstring& filename )
         UINT size = width * height * bytesPerPixel; // The size of the required memory buffer for
                                                     // holding all the bytes of the frame.
 
-        vector<BYTE> bitmap( size ); // The buffer to hold all the bytes of the frame.
-        pFormatConverter->CopyPixels( NULL, stride, size, bitmap.data( ) );
+        vector<BYTE> bytes( size ); // The buffer to hold all the bytes of the frame.
+        pFormatConverter->CopyPixels( NULL, stride, size, bytes.data( ) );
+
+        // Save the image in the Lisa format.
+        // The Lisa WIC codec should be installed (see the link below).
+        // https://github.com/ReneSlijkhuis/example-wic-codec
+
+        pFactory->CreateEncoder( GUID_LisaContainerFormat, NULL, &pEncoder );
+        // Check the return value to see if an encoder is found for the specified file format.
+
+        pFactory->CreateStream( &pFileStream );
+
+        wstring output = filename + L".lisa";
+        pFileStream->InitializeFromFilename( output.c_str( ), GENERIC_WRITE );
+
+        pEncoder->Initialize( pFileStream, WICBitmapEncoderNoCache );
+
+        pEncoder->CreateNewFrame( &pFrameEncode, &pPropertyBag );
+
+        pFrameEncode->SetPixelFormat( &pixelFormatDestination );
+
+        pFrameEncode->SetSize( width, height );
+
+        pFrameEncode->WritePixels( height, stride, size, bytes.data( ) );
+
+        pFrameEncode->Commit( );
+        pEncoder->Commit( );
 
         // Note: the WIC COM pointers should be released before 'CoUninitialize( )' is called.
     }
@@ -104,7 +143,7 @@ void WicReadFrame( const wstring& filename )
 
 int main( )
 {
-    WicReadFrame( L"<filename>" );
+    SaveAsLisa( L"<filename>" );
 
     return 0;
 }

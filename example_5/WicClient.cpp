@@ -53,7 +53,7 @@ void WicReadFrame( const wstring& filename )
         pFactory->CreateDecoderFromFilename( filename.c_str( ), NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pDecoder );
         // Check the return value to see if:
         //  - The specified file exists and can be read.
-        //  - A decoder is found for this file format. 
+        //  - A decoder is found for this file format.
 
         pDecoder->GetFrame( 0, &pFrame );
 
@@ -68,7 +68,7 @@ void WicReadFrame( const wstring& filename )
 
         PROPVARIANT variant;
         PropVariantInit( &variant );
-        
+
         // IFD Metadata - Image width
         pMetadataReader->GetMetadataByName( L"/ifd/{ushort=256}", &variant );
         PropVariantClear( &variant );
@@ -86,7 +86,7 @@ void WicReadFrame( const wstring& filename )
         PropVariantClear( &variant );
 
         // Note: the WIC COM pointers should be released before 'CoUninitialize( )' is called.
-    }    
+    }
     CoUninitialize( );
 }
 
@@ -95,7 +95,7 @@ void WicReadFrame( const wstring& filename )
 int main( )
 {
     WicReadFrame( L"<filename>" );
-    
+
     return 0;
 }
 

@@ -49,7 +49,7 @@ namespace WicClient
                 encoder.Frames.Add(frame);
 
                 using (var outFile = File.OpenWrite(filename + ".png"))
-                {                    
+                {
                     encoder.Save(outFile);
                 }
             }
